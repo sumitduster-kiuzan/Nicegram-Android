@@ -12,7 +12,6 @@ object NicegramBillingHelper {
         val ep = entryPoint(context)
         val billingManager = ep.billingManager()
         val userRepository = ep.userRepository()
-        return if (BuildConfig.IS_LITE_CLIENT) false
-        else billingManager.hasAnyPremium || (userRepository.userData.value?.hasAnySub ?: false)
+        return true
     }
 }
