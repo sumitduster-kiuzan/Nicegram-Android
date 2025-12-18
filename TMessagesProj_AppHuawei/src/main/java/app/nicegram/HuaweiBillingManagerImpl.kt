@@ -63,12 +63,12 @@ class HuaweiBillingManagerImpl(
     override val eventBillingIsReady: StateFlow<Boolean> get() = _eventBillingIsReady
 
 
-    private val _userActiveSub = MutableStateFlow(BillingManager.SubLevel.None)
+    private val _userActiveSub = MutableStateFlow(BillingManager.SubLevel.PremiumPlus)
     override val userActiveSub: StateFlow<BillingManager.SubLevel>
         get() = _userActiveSub
 
     override val hasAnyPremium: Boolean
-        get() = _userActiveSub.value != BillingManager.SubLevel.None
+        get() = true
 
     private val _billingStateFlow = MutableSharedFlow<BillingManager.BillingState>()
     override val billingStateFlow: Flow<BillingManager.BillingState>
