@@ -35,6 +35,6 @@ object GooglePlayHiltModule {
     @Provides
     @Singleton
     fun provideMarketFeatureFlagsProvider(): MarketFeatureFlagsProvider = object : MarketFeatureFlagsProvider {
-        override val canShowAds = true
+        override val canShowAds = false
     }
 }
