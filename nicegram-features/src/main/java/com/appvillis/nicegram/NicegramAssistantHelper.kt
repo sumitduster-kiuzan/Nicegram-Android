@@ -8,17 +8,7 @@ object NicegramAssistantHelper {
     private fun entryPoint(context: Context) = EntryPoints.get(context.applicationContext, NicegramAssistantEntryPoint::class.java)
 
     fun getSpecialOffer(context: Context): SpecialOffersRepository.SpecialOffer? {
-        val ep = entryPoint(context)
-        val getSpecialOfferUseCase = ep.getSpecialOfferUseCase()
-        val appSessionControlUseCase = ep.appSessionControlUseCase()
-
-        if (!getSpecialOfferUseCase.haveSeenCurrentOffer() && getSpecialOfferUseCase.canShowSpecialOfferCurrentSession(
-                appSessionControlUseCase.appSessionNumber
-            )
-        ) {
-            return getSpecialOfferUseCase.specialOffer
-        }
-
+        // Disabled special offers/ads since premium is unlocked
         return null
     }
 
@@ -30,15 +20,9 @@ object NicegramAssistantHelper {
     }
 
     fun getPossibleChatPlacements(context: Context, isRestricted: Boolean, hasNgPremium: Boolean) =
-        entryPoint(context).getChatPlacementsUseCase().invoke()
-            .filter { placement ->
-                val isChatTypeMatch = if (isRestricted) placement.showInRestrictedChat else placement.showInChat
-                val isUserTypeMatch =
-                    if (hasNgPremium) placement.showToPremium else true // Предполагаем, что все могут видеть непремиум-контент
-                isChatTypeMatch && isUserTypeMatch
-            }
+        emptyList<Any>() // Disabled ads placements
 
-    fun getEsimSplashData(context: Context) = entryPoint(context).aiChatRemoteConfigRepo().esimSplashData
+    fun getEsimSplashData(context: Context): Any? = null // Disabled ads
 
     fun shouldShowAvatarsWelcome(context: Context) = !entryPoint(context).avatarsOnboardingUseCase().hasSeenWelcome
     fun hasGeneratedAvatar(context: Context) = entryPoint(context).getAvatarsUseCase().hasAnyAvatar
