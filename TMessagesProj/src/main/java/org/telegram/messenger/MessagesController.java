@@ -20219,6 +20219,9 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public SponsoredMessagesInfo getSponsoredMessages(long dialogId) {
+        // Always return null - ads/sponsored messages disabled
+        return null;
+        /*
         SponsoredMessagesInfo info = sponsoredMessages.get(dialogId);
         if (info != null && (info.loading || Math.abs(SystemClock.elapsedRealtime() - info.loadTime) <= 5 * 60 * 1000)) {
             return info;
@@ -20315,6 +20318,7 @@ public class MessagesController extends BaseController implements NotificationCe
             });
         });
         return null;
+        */
     }
 
     public void clearSendAsPeers() {
@@ -22785,9 +22789,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isSponsoredDisabled() {
-        TLRPC.UserFull userFull = getUserFull(getUserConfig().getClientUserId());
-        if (userFull == null) return false;
-        return !userFull.sponsored_enabled;
+        // Always return true - ads/sponsored messages disabled
+        return true;
     }
 
     private boolean loadingAvailableEffects;
