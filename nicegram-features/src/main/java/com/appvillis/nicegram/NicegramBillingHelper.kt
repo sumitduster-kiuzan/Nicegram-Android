@@ -9,10 +9,7 @@ object NicegramBillingHelper {
         EntryPoints.get(context.applicationContext, NicegramAssistantEntryPoint::class.java)
 
     fun getUserHasNgPremiumSub(context: Context): Boolean {
-        val ep = entryPoint(context)
-        val billingManager = ep.billingManager()
-        val userRepository = ep.userRepository()
-        return if (BuildConfig.IS_LITE_CLIENT) false
-        else billingManager.hasAnyPremium || (userRepository.userData.value?.hasAnySub ?: false)
+        // Always return true to unlock premium features
+        return true
     }
 }
