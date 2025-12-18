@@ -714,8 +714,9 @@ public class MessagesController extends BaseController implements NotificationCe
         return premiumLocked && !getUserConfig().isPremium();
     }
     public boolean premiumPurchaseBlocked() {
-        // region hide tg premium
-        return true; // return premiumLocked;
+        // Premium purchase should only be blocked when server/config says so.
+        // This fork previously hard-blocked Telegram Premium purchase UI.
+        return premiumLocked;
     }
 
     public List<String> directPaymentsCurrency = new ArrayList<>();

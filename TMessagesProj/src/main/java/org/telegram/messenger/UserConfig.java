@@ -278,13 +278,33 @@ public class UserConfig extends BaseController {
                 getMediaDataController().loadReactions(false, null);
                 getMessagesController().getStoriesController().invalidateStoryLimit();
             });
+            maybeDisableSponsoredMessagesForPremium(newUser);
         } else if (oldUser == null) {
             AndroidUtilities.runOnUIThread(() -> {
                 getMessagesController().updatePremium(newUser.premium);
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 getMediaDataController().loadPremiumPromo(true);
             });
+            maybeDisableSponsoredMessagesForPremium(newUser);
         }
+    }
+
+    /**
+     * Telegram Premium includes the ability to remove sponsored messages (ads) in public channels.
+     * This ensures that once the account becomes Premium, sponsored messages are disabled automatically.
+     *
+     * Note: This does not "unlock" premium. It only applies after Telegram marks the user as premium.
+     */
+    private void maybeDisableSponsoredMessagesForPremium(TLRPC.User user) {
+        if (user == null || !user.premium) {
+            return;
+        }
+        // Ensure full user info is available before toggling the sponsored setting.
+        getMessagesController().loadFullUser(user, 0, true, userFull -> AndroidUtilities.runOnUIThread(() -> {
+            if (userFull != null && userFull.sponsored_enabled) {
+                getMessagesController().disableAds(true);
+            }
+        }));
     }
 
     public void
