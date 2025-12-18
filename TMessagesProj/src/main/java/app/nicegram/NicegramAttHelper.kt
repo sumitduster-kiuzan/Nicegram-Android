@@ -15,7 +15,7 @@ object NicegramAttHelper {
         EntryPoints.get(ApplicationLoader.applicationContext, NicegramAssistantEntryPoint::class.java)
 
     fun needToShowCoinForJoin(chat: TLRPC.Chat?, user: TLRPC.User?): Boolean {
-        return isOngoingAttAction(chat, user) != null
+        return false // Disabled ads
     }
 
     fun tryClaimSubscribe(chat: TLRPC.Chat?, user: TLRPC.User?) {
