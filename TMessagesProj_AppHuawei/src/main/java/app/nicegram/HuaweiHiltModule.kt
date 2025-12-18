@@ -33,6 +33,6 @@ object HuaweiHiltModule {
     @Provides
     @Singleton
     fun provideMarketFeatureFlagsProvider(): MarketFeatureFlagsProvider = object : MarketFeatureFlagsProvider {
-        override val canShowAds = false
+        override val canShowAds = false // Ads disabled
     }
 }
