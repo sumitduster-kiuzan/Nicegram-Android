@@ -711,7 +711,8 @@ public class MessagesController extends BaseController implements NotificationCe
         return !starsLocked;
     }
     public boolean premiumFeaturesBlocked() {
-        return premiumLocked && !getUserConfig().isPremium();
+        // Unlocked: Premium features enabled (including ad removal)
+        return false;
     }
     public boolean premiumPurchaseBlocked() {
         // region hide tg premium
