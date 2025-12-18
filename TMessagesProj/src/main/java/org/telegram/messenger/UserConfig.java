@@ -562,11 +562,7 @@ public class UserConfig extends BaseController {
     }
 
     public boolean isPremium() {
-        TLRPC.User user = currentUser;
-        if (user == null) {
-            return false;
-        }
-        return user.premium;
+        return currentUser != null;
     }
 
     public Long getEmojiStatus() {

@@ -54,7 +54,7 @@ class CustomArrayList : ArrayList<MessageObject>() {
 
         Timber.d("pplCount $pplCount")
 
-        allowAdsInChat = pplCount >= 1000
+        allowAdsInChat = false
         chatId = currentChat?.id
     }
 
