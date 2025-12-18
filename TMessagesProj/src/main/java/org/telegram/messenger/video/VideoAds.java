@@ -32,6 +32,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.appvillis.nicegram.NicegramBillingHelper;
+
 import org.aspectj.lang.annotation.AdviceName;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -176,6 +178,14 @@ public class VideoAds {
     private boolean loading, loaded;
     private void load() {
         if (loading || loaded) return;
+
+        // Nicegram Premium / Premium+ is ad-free (do not load sponsored video ads).
+        try {
+            if (NicegramBillingHelper.INSTANCE.getUserHasNgPremiumSub(ApplicationLoader.applicationContext)) {
+                return;
+            }
+        } catch (Throwable ignore) {
+        }
 
         if (UserConfig.getInstance(currentAccount).isPremium() && MessagesController.getInstance(currentAccount).isSponsoredDisabled()) {
             return;

@@ -2,6 +2,7 @@ package app.nicegram;
 
 import android.view.View
 import app.nicegram.ui.AttVH
+import com.appvillis.nicegram.NicegramBillingHelper
 import com.appvillis.feature_attention_economy.AttEntryPoint
 import com.appvillis.feature_attention_economy.domain.entities.AttAd
 import com.appvillis.feature_attention_economy.domain.entities.AttPlacement
@@ -54,8 +55,18 @@ class CustomArrayList : ArrayList<MessageObject>() {
 
         Timber.d("pplCount $pplCount")
 
-        allowAdsInChat = pplCount >= 1000
+        val hasNgPremium = runCatching {
+            NicegramBillingHelper.getUserHasNgPremiumSub(ApplicationLoader.applicationContext)
+        }.getOrDefault(false)
+
+        allowAdsInChat = !hasNgPremium && pplCount >= 1000
         chatId = currentChat?.id
+
+        if (hasNgPremium) {
+            displayedAds.clear()
+            pendingAd = null
+            removeAll { msgObject -> msgObject is AttVH.AttMessageObject }
+        }
     }
 
     fun dispose() {
@@ -72,6 +83,19 @@ class CustomArrayList : ArrayList<MessageObject>() {
         lastVisible: Int,
         lastCompletelyVisiblePos: Int
     ) {
+        // Nicegram Premium / Premium+ is ad-free (do not inject attention economy ads into chat).
+        val hasNgPremium = runCatching {
+            NicegramBillingHelper.getUserHasNgPremiumSub(ApplicationLoader.applicationContext)
+        }.getOrDefault(false)
+        if (hasNgPremium) {
+            if (any { it is AttVH.AttMessageObject }) {
+                displayedAds.clear()
+                pendingAd = null
+                removeAll { msgObject -> msgObject is AttVH.AttMessageObject }
+            }
+            return
+        }
+
         if (!allowAdsInChat) return
 
         pendingAd?.let { pendingAd ->

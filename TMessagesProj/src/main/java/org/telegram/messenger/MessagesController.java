@@ -20226,6 +20226,16 @@ public class MessagesController extends BaseController implements NotificationCe
         if (dialogId < 0 ? !ChatObject.isChannel(getChat(-dialogId)) : !UserObject.isBot(getUser(dialogId))) {
             return null;
         }
+        // Nicegram Premium / Premium+ should be ad-free (no sponsored messages).
+        // We intentionally skip loading and also clear any cached sponsored messages for this dialog.
+        try {
+            if (NicegramBillingHelper.INSTANCE.getUserHasNgPremiumSub(ApplicationLoader.applicationContext)) {
+                sponsoredMessages.remove(dialogId);
+                return null;
+            }
+        } catch (Throwable ignore) {
+            // Billing/DI may be unavailable very early; fall back to normal behavior.
+        }
         info = new SponsoredMessagesInfo();
         info.loading = true;
         sponsoredMessages.put(dialogId, info);
