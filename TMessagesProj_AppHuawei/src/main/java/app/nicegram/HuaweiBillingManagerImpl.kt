@@ -68,7 +68,7 @@ class HuaweiBillingManagerImpl(
         get() = _userActiveSub
 
     override val hasAnyPremium: Boolean
-        get() = _userActiveSub.value != BillingManager.SubLevel.None
+        get() = true // Unlocked premium features
 
     private val _billingStateFlow = MutableSharedFlow<BillingManager.BillingState>()
     override val billingStateFlow: Flow<BillingManager.BillingState>

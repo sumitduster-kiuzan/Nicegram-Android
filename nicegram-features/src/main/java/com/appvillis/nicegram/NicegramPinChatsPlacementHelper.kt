@@ -17,8 +17,8 @@ object NicegramPinChatsPlacementHelper {
         else entryPoint(context).hidePlacementUseCase().unhide(id)
     }
 
-    fun pumpFeatureEnabled(context: Context) = entryPoint(context).getPumpAdsConfigUseCase().invoke().value != null
-    fun pumpEnabled(context: Context) = entryPoint(context).getPumpSettingsUseCase().invoke().value.enabled
+    fun pumpFeatureEnabled(context: Context) = false // Ads disabled
+    fun pumpEnabled(context: Context) = false // Ads disabled
 
     fun setPumpEnabled(context: Context, enabled: Boolean) {
         entryPoint(context).updatePumpSettingsUseCase().setEnabled(enabled)
